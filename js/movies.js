@@ -1,4 +1,4 @@
-const WORKER_URL = 'https://streamverse.guestph-20.workers.dev/worker';
+const WORKER_URL = 'https://streamverse.guestph-20.workers.dev/tmdb-proxy';
 let movies = [];
 let currentItem;
 
