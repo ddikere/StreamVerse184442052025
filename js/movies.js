@@ -6,7 +6,7 @@ async function fetchNewMovies() {
   const today = new Date().toISOString().split('T')[0];
   const lastMonth = new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().split('T')[0];
   const params = `discover/movie?primary_release_date.gte=${lastMonth}&primary_release_date.lte=${today}&sort_by=primary_release_date.desc`;
-  const response = await fetch(`${WORKER_URL}?${params}`);
+  const response = await fetch(`${WORKER_URL}?endpoint=${params}`);
   const data = await response.json();
   return data.results;
 }
