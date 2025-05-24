@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreamVerse - Anime</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preload" href="css/styles.css" as="style">
+  <link rel="preload" href="js/home.js" as="script">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script defer src="js/anime.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <h1>StreamVerse</h1>
+      <div class="nav-right">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="movies.html">Movies</a></li>
+          <li><a href="tvshows.html">TV Shows</a></li>
+          <li><a href="anime.html">Anime</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- New Releases Section -->
+  <main>
+    <h2>New Released Episodes</h2>
+    <div class="filter-container">
+      <select id="anime-sort" onchange="sortAnime()">
+        <option value="first_air_date.desc">Newest First</option>
+        <option value="name.asc">Name (A-Z)</option>
+      </select>
+    </div>
+    <div class="scroll-wrapper">
+      <button class="scroll-btn left" onclick="scrollList('new-anime-list', -300)">❮</button>
+      <div class="scroll-container" id="new-anime-list"></div>
+      <button class="scroll-btn right" onclick="scrollList('new-anime-list', 300)">❯</button>
+    </div>
+
+    <!-- Genre Categories -->
+    <h2 class="genres-header">Genres</h2>
+    <div id="anime-genres"></div>
+  </main>
+  
+  <!-- Modal for Details -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">×</span>
+      <div class="modal-header">
+        <img id="modal-image" src="" alt="Poster">
+        <div class="modal-info">
+          <h2 id="modal-title"></h2>
+          <p id="modal-description"></p>
+          <p id="modal-rating"></p>
+          <select id="server" onchange="changeServer()">
+            <option value="vidsrc.cc">VidSrc.cc</option>
+            <option value="vidsrc.me">VidSrc.me</option>
+            <option value="player.videasy.net">Videasy.net</option>
+          </select>
+        </div>
+      </div>
+      <iframe id="modal-video" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    function scrollList(containerId, scrollAmount) {
+      const container = document.getElementById(containerId);
+      container.scrollLeft += scrollAmount;
+    }
+  </script>
+</body>
+</html>

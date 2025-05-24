@@ -1,0 +1,214 @@
+ <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Watch Movie</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color: #000;
+        font-family: 'Segoe UI', sans-serif;
+        overflow: hidden;
+      }
+
+      iframe {
+        width: 100vw;
+        height: 100vh;
+        border: none;
+      }
+
+      #toggleButton {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        background-color: rgba(30, 30, 30, 0.8);
+        border: none;
+        border-radius: 50%;
+        padding: 12px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #toggleButton:hover {
+        background-color: rgba(60, 60, 60, 0.9);
+      }
+
+      #toggleButton svg {
+        width: 24px;
+        height: 24px;
+        stroke: white;
+      }
+
+      #serverMenu {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(25, 25, 25, 0.98);
+        border: 1px solid #333;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+        padding: 20px;
+        display: none;
+        z-index: 9999;
+        width: 90%;
+        max-width: 300px;
+      }
+
+      .server-option {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        margin: 8px 0;
+        background-color: #1e1e1e;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .server-option:hover {
+        background-color: #333;
+      }
+
+      #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+        #serverMenu {
+          top: 80px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: auto;
+          max-width: none;
+          padding: 10px;
+          border-radius: 8px;
+        }
+
+        .server-option {
+          font-size: 14px;
+          padding: 8px 12px;
+          width: 180px;
+        }
+
+        #overlay {
+          display: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Iframe Player -->
+  <iframe
+    id="movieFrame"
+    src="https://player.videasy.net/movie/popular?progress=120"
+    allowfullscreen
+    sandbox="allow-scripts allow-same-origin allow-forms"
+    allow="fullscreen; autoplay"
+  ></iframe>
+
+    <!-- Overlay -->
+    <div id="overlay"></div>
+
+    <!-- Server Toggle Button -->
+    <button id="toggleButton" aria-label="Change Server">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M17.5 19a4.5 4.5 0 0 0 .5-8.963A6 6 0 0 0 6.09 9.5 4 4 0 0 0 6 17h11.5z" />
+      </svg>
+    </button>
+
+    <!-- Server Menu -->
+    <div id="serverMenu">
+      <button class="server-option" data-url="https://player.videasy.net/movie/popular?progress=120">Soyou</button>
+      <button class="server-option" data-url="https://vidfast.pro/movie/popular?autoPlay=true&amp;title=true&amp;poster=true&amp;theme=b30a0a">Bruno</button>
+      <button class="server-option" data-url="https://vidjoy.pro/embed/movie/popular?adFree=true&amp;DefaultIcons=true&amp;primary=ffffff&amp;secondary=c91d1d&amp;icon=ffffff&amp;autoplay=true">Franco</button>
+      <button class="server-option" data-url="https://player.vidsrc.co/embed/movie/popular?autoplay=true&amp;poster=true&amp;primarycolor=db0000&amp;secondarycolor=a2a2a2&amp;iconcolor=eefdec">Kagura</button>
+      <button class="server-option" data-url="https://api-mocine.vercel.app/movie/popular">Primary</button>
+    </div>
+
+    <script>
+      const iframe = document.getElementById('movieFrame');
+      const toggleButton = document.getElementById('toggleButton');
+      const serverMenu = document.getElementById('serverMenu');
+      const overlay = document.getElementById('overlay');
+      const serverOptions = document.querySelectorAll('.server-option');
+
+      toggleButton.addEventListener('click', () => {
+        const isOpen = serverMenu.style.display === 'block';
+        serverMenu.style.display = isOpen ? 'none' : 'block';
+        overlay.style.display = isOpen ? 'none' : 'block';
+      });
+
+      overlay.addEventListener('click', () => {
+        serverMenu.style.display = 'none';
+        overlay.style.display = 'none';
+      });
+
+serverOptions.forEach(option => {
+  option.addEventListener('click', () => {
+    const selectedUrl = option.getAttribute('data-url');
+    iframe.src = selectedUrl;
+    localStorage.setItem('selectedServerUrl', selectedUrl); // save to localStorage
+    serverMenu.style.display = 'none';
+    overlay.style.display = 'none';
+  });
+});
+    </script>
+
+<script>
+    document.onkeydown = function (e) {
+    if (e.keyCode == 123) {
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+        return false;
+    }
+    if (e.ctrlKey && e.keyCode == 85) {
+        return false;
+    }
+};
+
+document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+}, false);
+
+document.addEventListener('keydown', function (e) {
+    if (e.keyCode === 123) {
+        e.preventDefault();
+    }
+});
+  </script>
+
+<script
+disable-copy='true'
+disable-cut='true'
+disable-paste='true'
+clear-log='true'
+disable-devtool-auto
+disable-menu='false'
+src='https://cdn.jsdelivr.net/npm/disable-devtool'
+></script>
+<script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
+  </body>
+  </html>

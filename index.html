@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreamVerse - Home</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preload" href="css/styles.css" as="style">
+  <link rel="preload" href="js/home.js" as="script">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script defer src="js/home.js"></script>
+</head>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <h1>StreamVerse</h1>
+      <div class="nav-right">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="movies.html">Movies</a></li>
+          <li><a href="tvshows.html">TV Shows</a></li>
+          <li><a href="anime.html">Anime</a></li>
+        </ul>
+        <button onclick="openSearchModal()" class="search-btn">Search</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Banner -->
+  <header class="banner" id="banner">
+    <div class="banner-text">
+      <h1 id="banner-title"></h1>
+    </div>
+  </header>
+
+  <!-- Trending Sections -->
+  <main>
+    <h2>Trending Movies</h2>
+    <div class="scroll-wrapper">
+      <button class="scroll-btn left" onclick="scrollList('movies-list', -300)">&#10094;</button>
+      <div class="scroll-container" id="movies-list"></div>
+      <button class="scroll-btn right" onclick="scrollList('movies-list', 300)">&#10095;</button>
+    </div>
+
+    <h2>Trending TV Shows</h2>
+    <div class="scroll-wrapper">
+      <button class="scroll-btn left" onclick="scrollList('tvshows-list', -300)">&#10094;</button>
+      <div class="scroll-container" id="tvshows-list"></div>
+      <button class="scroll-btn right" onclick="scrollList('tvshows-list', 300)">&#10095;</button>
+    </div>
+
+    <h2>Trending Anime</h2>
+    <div class="scroll-wrapper">
+      <button class="scroll-btn left" onclick="scrollList('anime-list', -300)">&#10094;</button>
+      <div class="scroll-container" id="anime-list"></div>
+      <button class="scroll-btn right" onclick="scrollList('anime-list', 300)">&#10095;</button>
+    </div>
+  </main>
+
+  <!-- Modal for Details -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">×</span>
+      <div class="modal-header">
+        <img id="modal-image" src="" alt="Poster">
+        <div class="modal-info">
+          <h2 id="modal-title"></h2>
+          <p id="modal-description"></p>
+          <p id="modal-rating"></p>
+          <select id="server" onchange="changeServer()">
+            <option value="vidsrc.cc">VidSrc.cc</option>
+            <option value="vidsrc.me">VidSrc.me</option>
+            <option value="player.videasy.net">Videasy.net</option>
+          </select>
+        </div>
+      </div>
+      <iframe id="modal-video" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div class="modal" id="search-modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeSearchModal()">×</span>
+      <input type="text" id="search-input" placeholder="Search movies, TV shows, anime..." oninput="searchTMDB()">
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </div>
+
+  <script>
+    function scrollList(containerId, scrollAmount) {
+      const container = document.getElementById(containerId);
+      container.scrollLeft += scrollAmount;
+    }
+  </script>
+</body>
+</html>

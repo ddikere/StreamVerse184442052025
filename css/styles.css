@@ -1,0 +1,242 @@
+body {
+  background-color: #1F2937;
+  color: #FFFFFF;
+  font-family: sans-serif;
+  margin: 0;
+}
+
+nav {
+  background: linear-gradient(to right, #1E3A8A, #7C3AED);
+  padding: 1rem;
+}
+
+nav .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+nav .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+nav ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  color: #93C5FD;
+}
+
+nav .search-btn {
+  background-color: #3B82F6;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+nav .search-btn:hover {
+  background-color: #2563EB;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+main h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.scroll-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar in Chrome, Safari, and Opera */
+}
+
+.scroll-container img {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  z-index: 10;
+}
+
+.scroll-btn.left {
+  left: 0;
+}
+
+.scroll-btn.right {
+  right: 0;
+}
+
+.scroll-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.banner {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 16rem;
+}
+
+.banner-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.banner-text h1 {
+  font-size: 2.25rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.genres-header {
+  margin-top: 2rem;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #1F2937;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  position: relative;
+}
+
+.modal .close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-header {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.modal-header img {
+  width: 150px;
+  height: auto;
+}
+
+.modal-info {
+  flex: 1;
+}
+
+.modal-info h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-info p {
+  margin-bottom: 0.5rem;
+}
+
+.modal-info select {
+  background: #374151;
+  color: #FFFFFF;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+}
+
+.modal iframe {
+  width: 100%;
+  height: 400px;
+}
+
+#search-modal .modal-content {
+  width: 600px;
+}
+
+#search-input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  background: #374151;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 0.375rem;
+}
+
+.search-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.5rem;
+}
+
+.search-results img {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
