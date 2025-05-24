@@ -1,26 +1,25 @@
-const API_KEY = 'a1e72fd93ed59f56e6332813b9f8dcae';
-const BASE_URL = 'https://api.themoviedb.org/3';
-const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+const WORKER_URL = 'https://streamverse.guestph-20.workers.dev/';
 let movies = [];
 let currentItem;
 
 async function fetchNewMovies() {
   const today = new Date().toISOString().split('T')[0];
   const lastMonth = new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().split('T')[0];
-  const res = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&primary_release_date.gte=${lastMonth}&primary_release_date.lte=${today}&sort_by=primary_release_date.desc`);
-  const data = await res.json();
+  const params = `discover/movie?primary_release_date.gte=${lastMonth}&primary_release_date.lte=${today}&sort_by=primary_release_date.desc`;
+  const response = await fetch(`${WORKER_URL}?endpoint=${params}`);
+  const data = await response.json();
   return data.results;
 }
 
 async function fetchGenres() {
-  const res = await fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}`);
-  const data = await res.json();
+  const response = await fetch(`${WORKER_URL}?endpoint=genre/movie/list`);
+  const data = await response.json(); 
   return data.genres;
 }
 
 async function fetchMoviesByGenre(genreId) {
-  const res = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}&sort_by=popularity.desc`);
-  const data = await res.json();
+  const response = await fetch(`${WORKER_URL}?endpoint=discover/movie?with_genres=${genreId}&sort_by=popularity.desc`);
+  const data = await response.json();
   return data.results.slice(0, 10); // Limit to 10 items per genre
 }
 
@@ -29,7 +28,7 @@ function displayList(items, containerId) {
   container.innerHTML = '';
   items.forEach(item => {
     const img = document.createElement('img');
-    img.src = `${IMG_URL}${item.poster_path}`;
+    img.src = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
     img.alt = item.title || item.name;
     img.onclick = () => showDetails(item);
     container.appendChild(img);
@@ -59,7 +58,7 @@ function showDetails(item) {
   currentItem = item;
   document.getElementById('modal-title').textContent = item.title || item.name;
   document.getElementById('modal-description').textContent = item.overview;
-  document.getElementById('modal-image').src = `${IMG_URL}${item.poster_path}`;
+  document.getElementById('modal-image').src = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
   document.getElementById('modal-rating').innerHTML = '★'.repeat(Math.round(item.vote_average / 2));
   changeServer();
   document.getElementById('modal').style.display = 'flex';
@@ -67,13 +66,13 @@ function showDetails(item) {
 
 function changeServer() {
   const server = document.getElementById('server').value;
-  const type = "movie"
+  const type = currentItem.media_type === "movie" ? "movie" : "tv";
   let embedURL = "";
 
   if (server === "vidsrc.cc") {
     embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
   } else if (server === "vidsrc.me") {
-    embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
+    embedURL = `https://vidsrc.me/embed/${type}/${currentItem.id}`;
   } else if (server === "player.videasy.net") {
     embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
   }
