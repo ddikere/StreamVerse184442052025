@@ -20,7 +20,7 @@ async function fetchGenres() {
 async function fetchMoviesByGenre(genreId) {
   const response = await fetch(`${WORKER_URL}?endpoint=discover/movie?with_genres=${genreId}&sort_by=popularity.desc`);
   const data = await response.json();
-  return data.results.slice(0, 10); // Limit to 10 items per genre
+  return data.results.slice(0, 20); // Limit to 10 items per genre
 }
 
 function displayList(items, containerId) {
