@@ -30,7 +30,7 @@
   <main>
     <h2>New Released Movies</h2>
     <div class="filter-container">
-      <select id="movies-sort" onchange="sortMovies()">
+      <select id="movies-sort-new" onchange="sortNewMovies()">
         <option value="release_date.desc">Newest First</option>
         <option value="title.asc">Name (A-Z)</option>
       </select>
@@ -42,8 +42,24 @@
     </div>
 
     <!-- Genre Categories -->
-    <h2 class="genres-header">Genres</h2>
-    <div id="movie-genres"></div>
+	<section id="movies">
+      <h2 class="genres-header">All Movies</h2>
+	  <div class="filters">
+	    <input type="text" id="search-bar" placeholder="Search movies by title..." oninput="searchMovies()">
+		<select id="movies-sort" onchange="sortMovies()">
+		  <option value="popularity.desc">Most Popular</option>
+		  <option value="release_date.desc">Newest First</option>
+		  <option value="title.asc">Name (A-Z)</option>
+		  <option value="vote_average.desc">Highest Rated</option>
+		</select>
+	  </div>
+      <div class="movie-grid" id="movies-list"></div>
+	  <div class="pagination">
+	    <button id="prev-page" onclick="changePage(-1)">❮ Previous</button>
+		<span id="page-info"></span>
+		<button id="next-page" onclick="changePage(1)">Next ❯</button>
+	  </div>
+	</section>
   </main>
   
   <!-- Modal for Details -->
