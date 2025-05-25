@@ -80,6 +80,7 @@ async function fetchAndDisplayMovies(sortBy = document.getElementById('movies-so
   const res = await fetch(url);
   const data = await res.json();
   movies = data.results;
+  totalPages = data.total_pages;
   displayList(movies, 'movies-list');
 }
 
