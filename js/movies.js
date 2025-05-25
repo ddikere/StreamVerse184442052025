@@ -23,7 +23,7 @@ async function fetchMovies(page = 1, sortBy = document.getElementById('movies-so
   while (remaining > 0 && currentFetchPage <= totalPages) {
     const url = searchQuery
       ? `${WORKER_URL}?endpoint=/search/movie?query=${encodeURIComponent(searchQuery)}&page=${currentFetchPage}`
-      : `${WORKER_URL}?endpoint=/discover/movie?page=${currentFetchPage}&sort_by={sortBy}`
+      : `${WORKER_URL}?endpoint=/discover/movie?page=${currentFetchPage}&sort_by=${sortBy}`
     const response = await fetch(url);
     const data = await response.json();
     totalPages = Math.ceil(data.total_results / MOVIES_PER_PAGE); // Adjust total pages for 60 movies per page
