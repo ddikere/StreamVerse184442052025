@@ -74,7 +74,7 @@ async function sortMovies() {
 }
 
 async function fetchAndDisplayMovies(sortBy = document.getElementById('movies-sort').value) {
-  movies = data.results;
+  movies = await fetchMovies(currentPage, sortBy);
   //totalPages = data.total_pages;
   displayList(movies, 'movies-list');
 }
