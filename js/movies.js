@@ -38,6 +38,7 @@ function displayList(items, containerId) {
 function displayGenres(genres) {
   const genresContainer = document.getElementById('movie-genres');
   genresContainer.innerHTML = '';
+  console.log('Genre: ', genres)
   genres.forEach(async (genre) => {
     const genreMovies = await fetchMoviesByGenre(genre.id);
     const genreSection = document.createElement('div');
