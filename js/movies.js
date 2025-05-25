@@ -1,6 +1,10 @@
 const WORKER_URL = 'https://streamverse.guestph-20.workers.dev/tmdb-proxy';
 let movies = [];
 let currentItem;
+let currentPage = 1;
+let totalPages = 1;
+let searchQuery = '';
+const MOVIES_PER_PAGE = 70;
 
 async function fetchNewMovies() {
   const today = new Date().toISOString().split('T')[0];
@@ -11,16 +15,24 @@ async function fetchNewMovies() {
   return data.results;
 }
 
-async function fetchGenres() {
-  const response = await fetch(`${WORKER_URL}?endpoint=genre/movie/list`);
-  const data = await response.json();
-  return data.genres;
-}
-
-async function fetchMoviesByGenre(genreId) {
-  const response = await fetch(`${WORKER_URL}?endpoint=discover/movie?with_genres=${genreId}&sort_by=popularity.desc`);
-  const data = await response.json();
-  return data.results.slice(0, 20); // Limit to 10 items per genre
+async function fetchMovies(page = 1, moviesPerPage = MOVIES_PER_PAGE) {
+  const movies = [];
+  let remaining = moviesPerPage;
+  let currentFetchPage = page;
+  const moviesPerApiPage = 20; // TMDB returns 20 movies per page
+  while (remaining > 0 && currentFetchPage <= totalPages) {
+    const url = searchQuery
+      ? `${WORKER_URL}?endpoint=/search/movie?query=${encodeURIComponent(searchQuery)}&page=${currentFetchPage}`
+      : `${WORKER_URL}?endpoint=/discover/movie?page=${currentFetchPage}&sort_by=popularity.desc`
+    const response = await fetch(url);
+    const data = await response.json();
+    totalPages = Math.ceil(data.total_results / MOVIES_PER_PAGE); // Adjust total pages for 60 movies per page
+    const fetchedMovies = data.results;
+    movies.push(...fetchedMovies);
+    remaining -= fetchedMovies.length;
+    currentFetchPage++;
+  }
+  return movies.slice(0, moviesPerPage);
 }
 
 function displayList(items, containerId) {
@@ -33,26 +45,40 @@ function displayList(items, containerId) {
     img.onclick = () => showDetails(item);
     container.appendChild(img);
   });
+  updatePagination();
 }
 
-function displayGenres(genres) {
-  const genresContainer = document.getElementById('movie-genres');
-  genresContainer.innerHTML = '';
-  console.log('Genre: ', genres)
-  genres.forEach(async (genre) => {
-    const genreMovies = await fetchMoviesByGenre(genre.id);
-    const genreSection = document.createElement('div');
-    genreSection.innerHTML = `
-      <h2>${genre.name}</h2>
-      <div class="scroll-wrapper">
-        <button class="scroll-btn left" onclick="scrollList('genre-${genre.id}', -300)">❮</button>
-        <div class="scroll-container" id="genre-${genre.id}"></div>
-        <button class="scroll-btn right" onclick="scrollList('genre-${genre.id}', 300)">❯</button>
-      </div>
-    `;
-    genresContainer.appendChild(genreSection);
-    displayList(genreMovies, `genre-${genre.id}`);
-  });
+function updatePagination() {
+  const pageInfo = document.getElementById('page-info');
+  pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+  document.getElementById('prev-page').disabled = currentPage === 1;
+  document.getElementById('next-page').disabled = currentPage === totalPages;
+}
+
+async function changePage(direction) {
+  currentPage += direction;
+  if (currentPage < 1) currentPage = 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+  await fetchAndDisplayMovies();
+}
+
+async function searchMovies() {
+  searchQuery = document.getElementById('search-bar').value.toLowerCase();
+  currentPage = 1;
+  await fetchAndDisplayMovies();
+}
+
+async function sortMovies() {
+  const sortBy = document.getElementById('movies-sort').value;
+  await fetchAndDisplayMovies(sortBy);
+}
+
+async function fetchAndDisplayMovies(sortBy = document.getElementById('movies-sort').value) {
+  const url = searchQuery
+    ? `${WORKER_URL}?endpoint=search/movie?query=${encodeURIComponent(searchQuery)}&page=${currentPage}`
+    : `${WORKER_URL}?endpoint=discover/movie?page=${currentPage}&sort_by=${sortBy}`;
+  movies = await fetchMovies(currentPage);
+  displayList(movies, 'movies-list');
 }
 
 function showDetails(item) {
@@ -86,7 +112,7 @@ function closeModal() {
   document.getElementById('modal-video').src = '';
 }
 
-function sortMovies() {
+function sortNewMovies() {
   const sortBy = document.getElementById('movies-sort').value;
   let sortedMovies = [...movies];
   if (sortBy === 'release_date.desc') {
@@ -100,8 +126,7 @@ function sortMovies() {
 async function init() {
   movies = await fetchNewMovies();
   displayList(movies, 'new-movies-list');
-  const genres = await fetchGenres();
-  displayGenres(genres);
+  await fetchAndDisplayMovies();
 }
 
 init();
