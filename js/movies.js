@@ -77,7 +77,9 @@ async function fetchAndDisplayMovies(sortBy = document.getElementById('movies-so
   const url = searchQuery
     ? `${WORKER_URL}?endpoint=search/movie?query=${encodeURIComponent(searchQuery)}&page=${currentPage}`
     : `${WORKER_URL}?endpoint=discover/movie?page=${currentPage}&sort_by=${sortBy}`;
-  movies = await fetchMovies(currentPage);
+  const res = await fetch(url);
+  const data = await res.json();
+  movies = data.results;
   displayList(movies, 'movies-list');
 }
 
