@@ -15,7 +15,7 @@ async function fetchNewMovies() {
   return data.results;
 }
 
-async function fetchMovies(page = 1, moviesPerPage = MOVIES_PER_PAGE) {
+async function fetchMovies(page = 1, sortBy = document.getElementById('movies-sort').value, moviesPerPage = MOVIES_PER_PAGE) {
   const movies = [];
   let remaining = moviesPerPage;
   let currentFetchPage = page;
@@ -23,7 +23,7 @@ async function fetchMovies(page = 1, moviesPerPage = MOVIES_PER_PAGE) {
   while (remaining > 0 && currentFetchPage <= totalPages) {
     const url = searchQuery
       ? `${WORKER_URL}?endpoint=/search/movie?query=${encodeURIComponent(searchQuery)}&page=${currentFetchPage}`
-      : `${WORKER_URL}?endpoint=/discover/movie?page=${currentFetchPage}&sort_by=popularity.desc`
+      : `${WORKER_URL}?endpoint=/discover/movie?page=${currentFetchPage}&sort_by={sortBy}`
     const response = await fetch(url);
     const data = await response.json();
     totalPages = Math.ceil(data.total_results / MOVIES_PER_PAGE); // Adjust total pages for 60 movies per page
@@ -74,13 +74,8 @@ async function sortMovies() {
 }
 
 async function fetchAndDisplayMovies(sortBy = document.getElementById('movies-sort').value) {
-  const url = searchQuery
-    ? `${WORKER_URL}?endpoint=search/movie?query=${encodeURIComponent(searchQuery)}&page=${currentPage}`
-    : `${WORKER_URL}?endpoint=discover/movie?page=${currentPage}&sort_by=${sortBy}`;
-  const res = await fetch(url);
-  const data = await res.json();
   movies = data.results;
-  totalPages = data.total_pages;
+  //totalPages = data.total_pages;
   displayList(movies, 'movies-list');
 }
 
@@ -96,7 +91,7 @@ function showDetails(item) {
 
 function changeServer() {
   const server = document.getElementById('server').value;
-  const type = currentItem.media_type === "movie" ? "movie" : "tv";
+  const type = "movie";
   let embedURL = "";
 
   if (server === "vidsrc.cc") {
